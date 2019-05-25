@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BroncoCast</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_broadcasts">Broadcasts</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_organizations">Organizations</string>
+</resources>
