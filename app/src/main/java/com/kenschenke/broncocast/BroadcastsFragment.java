@@ -1,12 +1,23 @@
 package com.kenschenke.broncocast;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -65,6 +76,44 @@ public class BroadcastsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_broadcasts, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ListView listView = view.findViewById(R.id.listView);
+
+        final List<Map<String,String>> broadcastData = new ArrayList<>();
+
+        for (int i = 1; i <= 15; i++) {
+            Map<String,String> broadcastInfo = new HashMap<>();
+            broadcastInfo.put("sent", "Sent Date " + Integer.toString(i));
+            broadcastInfo.put("content", "Content " + Integer.toString(i));
+            broadcastData.add(broadcastInfo);
+        }
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(view.getContext(), broadcastData,
+                android.R.layout.simple_list_item_2,
+                new String[] {"sent", "content"},
+                new int[] {android.R.id.text1, android.R.id.text2});
+        listView.setAdapter(simpleAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(), BroadcastDetailActivity.class);
+
+                intent.putExtra("Sent", broadcastData.get(position).get("sent"));
+
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

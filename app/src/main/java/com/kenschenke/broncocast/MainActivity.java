@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(this);
         loadFragment(new BroadcastsFragment());
+
+        setTitle("BroncoCast");
     }
 
     @Override

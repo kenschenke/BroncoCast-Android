@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ForgotPasswordStepTwoActivity"></activity>
+        <activity android:name=".BroadcastDetailActivity"></activity>
+        <activity android:name=".ForgotPasswordStepTwoActivity" />
         <activity android:name=".ForgotPasswordStepOneActivity" />
         <activity android:name=".RegistrationStepTwoActivity" />
         <activity android:name=".RegistrationStepOneActivity" />
