@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "971483665412",
+    "firebase_url": "https://broncocast.firebaseio.com",
+    "project_id": "broncocast",
+    "storage_bucket": "broncocast.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971483665412:android:d305ed9068c5b064",
+        "android_client_info": {
+          "package_name": "com.kenschenke.broncocast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971483665412-uau2f1sv98v72k8n89e00aek0kjen12l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx-oK2wLR2A7mDp5z5Bm1QZUJx9fVkK5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971483665412-uau2f1sv98v72k8n89e00aek0kjen12l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
