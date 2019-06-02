@@ -2,22 +2,35 @@ package com.kenschenke.broncocast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.android.volley.Request.Method.GET;
 
 
 /**
@@ -82,38 +95,78 @@ public class BroadcastsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listView = view.findViewById(R.id.listView);
+        fetchBroadcasts();
+    }
 
-        final List<Map<String,String>> broadcastData = new ArrayList<>();
-
-        for (int i = 1; i <= 15; i++) {
-            Map<String,String> broadcastInfo = new HashMap<>();
-            broadcastInfo.put("sent", "Sent Date " + Integer.toString(i));
-            broadcastInfo.put("content", "Content " + Integer.toString(i));
-            broadcastData.add(broadcastInfo);
-        }
-
-        SimpleAdapter simpleAdapter = new SimpleAdapter(view.getContext(), broadcastData,
-                android.R.layout.simple_list_item_2,
-                new String[] {"sent", "content"},
-                new int[] {android.R.id.text1, android.R.id.text2});
-        listView.setAdapter(simpleAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void fetchBroadcasts() {
+        UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, urlMaker.getUrl(UrlMaker.URL_BROADCASTS), null, new Response.Listener<JSONObject>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), BroadcastDetailActivity.class);
+            public void onResponse(JSONObject response) {
+                try {
+                    if (!response.getBoolean("Success")) {
+                        Toast.makeText(getActivity(), response.getString("Error"), Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-                intent.putExtra("Sent", broadcastData.get(position).get("sent"));
+                    ListView listView = getView().findViewById(R.id.listView);
 
-                startActivity(intent);
+                    final List<Map<String,String>> broadcastData = new ArrayList<>();
+
+                    JSONArray broadcasts = response.getJSONArray("Broadcasts");
+                    for (int i = 0; i < broadcasts.length(); i++) {
+                        JSONObject broadcast = broadcasts.getJSONObject(i);
+
+                        Map<String,String> broadcastInfo = new HashMap<>();
+                        broadcastInfo.put("sent", broadcast.getString("Delivered"));
+                        broadcastInfo.put("content", broadcast.getString("ShortMsg"));
+                        broadcastData.add(broadcastInfo);
+                    }
+
+                    SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), broadcastData,
+                            android.R.layout.simple_list_item_2,
+                            new String[] {"sent", "content"},
+                            new int[] {android.R.id.text1, android.R.id.text2});
+                    listView.setAdapter(simpleAdapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(view.getContext(), BroadcastDetailActivity.class);
+
+                            intent.putExtra("Sent", broadcastData.get(position).get("sent"));
+
+                            startActivity(intent);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error", error.toString());
+                Toast.makeText(getActivity(), "Unable to contact server", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                SharedPreferences prefs = getActivity().getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
+                headers.put("cookie", prefs.getString("AuthCookie", ""));
+                return headers;
+            }
+        };
+
+        BroncoCastApplication app = (BroncoCastApplication) getActivity().getApplication();
+        app.getRequestQueue().add(jsonObjectRequest);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        fetchBroadcasts();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
