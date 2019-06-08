@@ -13,6 +13,8 @@ public class UrlMaker {
     public static String URL_LOGOUT = "logout?applogout";
     public static String URL_REGISTER = "api/register";
     public static String URL_BROADCASTS = "api/broadcasts";
+    public static String URL_RECOVER_SEND = "api/recover/send";
+    public static String URL_RECOVER_SAVE = "api/recover/save";
 
     private UrlMaker(SharedPreferences sharedPreferences) {
         server = sharedPreferences.getString("server", "dev.broncocast.org");
