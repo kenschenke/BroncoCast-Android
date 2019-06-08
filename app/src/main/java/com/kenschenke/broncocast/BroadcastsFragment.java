@@ -118,14 +118,16 @@ public class BroadcastsFragment extends Fragment {
                         JSONObject broadcast = broadcasts.getJSONObject(i);
 
                         Map<String,String> broadcastInfo = new HashMap<>();
-                        broadcastInfo.put("sent", broadcast.getString("Delivered"));
-                        broadcastInfo.put("content", broadcast.getString("ShortMsg"));
+                        broadcastInfo.put("sentBy", broadcast.getString("UsrName"));
+                        broadcastInfo.put("delivered", broadcast.getString("Delivered"));
+                        broadcastInfo.put("shortMsg", broadcast.getString("ShortMsg"));
+                        broadcastInfo.put("longMsg", broadcast.getString("LongMsg"));
                         broadcastData.add(broadcastInfo);
                     }
 
                     SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), broadcastData,
                             android.R.layout.simple_list_item_2,
-                            new String[] {"sent", "content"},
+                            new String[] {"delivered", "shortMsg"},
                             new int[] {android.R.id.text1, android.R.id.text2});
                     listView.setAdapter(simpleAdapter);
 
@@ -134,7 +136,10 @@ public class BroadcastsFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(view.getContext(), BroadcastDetailActivity.class);
 
-                            intent.putExtra("Sent", broadcastData.get(position).get("sent"));
+                            intent.putExtra("SentBy", broadcastData.get(position).get("sentBy"));
+                            intent.putExtra("Delivered", broadcastData.get(position).get("delivered"));
+                            intent.putExtra("ShortMsg", broadcastData.get(position).get("shortMsg"));
+                            intent.putExtra("LongMsg", broadcastData.get(position).get("longMsg"));
 
                             startActivity(intent);
                         }

@@ -3,6 +3,7 @@ package com.kenschenke.broncocast;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class BroadcastDetailActivity extends AppCompatActivity {
@@ -15,9 +16,25 @@ public class BroadcastDetailActivity extends AppCompatActivity {
         setTitle("Broadcast Detail");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView textView = findViewById(R.id.textView);
         Intent intent = getIntent();
-        textView.setText(intent.getStringExtra("Sent"));
+
+        TextView textViewSentBy = findViewById(R.id.textViewSentBy);
+        textViewSentBy.setText(intent.getStringExtra("SentBy"));
+
+        TextView textViewDelivered = findViewById(R.id.textViewDelivered);
+        textViewDelivered.setText(intent.getStringExtra("Delivered"));
+
+        TextView textViewShortMsg = findViewById(R.id.textViewShortMsg);
+        textViewShortMsg.setText(intent.getStringExtra("ShortMsg"));
+
+        TextView textViewLongMsg = findViewById(R.id.textViewLongMsg);
+        String longMsg = intent.getStringExtra("LongMsg");
+        if (longMsg.isEmpty()) {
+            findViewById(R.id.textViewLongMsgLabel).setVisibility(View.INVISIBLE);
+            textViewLongMsg.setVisibility(View.INVISIBLE);
+        } else {
+            textViewLongMsg.setText(longMsg);
+        }
     }
 
     @Override
