@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +100,21 @@ public class BroadcastsFragment extends Fragment {
         fetchBroadcasts();
     }
 
+    public class broadcastComp implements Comparator<Map<String,String>> {
+        public int compare(Map<String,String> b1, Map<String,String> b2) {
+            int t1 = Integer.parseInt(b1.get("timestamp"));
+            int t2 = Integer.parseInt(b2.get("timestamp"));
+
+            if (t1 < t2) {
+                return 1;
+            } else if (t1 > t2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
     private void fetchBroadcasts() {
         UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, urlMaker.getUrl(UrlMaker.URL_BROADCASTS), null, new Response.Listener<JSONObject>() {
@@ -122,8 +139,11 @@ public class BroadcastsFragment extends Fragment {
                         broadcastInfo.put("delivered", broadcast.getString("Delivered"));
                         broadcastInfo.put("shortMsg", broadcast.getString("ShortMsg"));
                         broadcastInfo.put("longMsg", broadcast.getString("LongMsg"));
+                        broadcastInfo.put("timestamp", broadcast.getString("Timestamp"));
                         broadcastData.add(broadcastInfo);
                     }
+
+                    Collections.sort(broadcastData, new broadcastComp());
 
                     SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), broadcastData,
                             android.R.layout.simple_list_item_2,
