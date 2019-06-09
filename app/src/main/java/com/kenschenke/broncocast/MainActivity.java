@@ -24,7 +24,7 @@ import static com.android.volley.Request.Method.GET;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
-        OrgsFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         BroadcastsFragment.OnFragmentInteractionListener {
 
@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ProfileFragment();
                 break;
 
-            case R.id.navigation_organizations:
-                fragment = new OrgsFragment();
+            case R.id.navigation_about:
+                fragment = new AboutFragment();
                 break;
         }
 
