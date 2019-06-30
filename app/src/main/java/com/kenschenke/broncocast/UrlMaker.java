@@ -15,6 +15,8 @@ public class UrlMaker {
     public static String URL_BROADCASTS = "api/broadcasts";
     public static String URL_RECOVER_SEND = "api/recover/send";
     public static String URL_RECOVER_SAVE = "api/recover/save";
+    public static String URL_PROFILE = "api/profile";
+    public static String URL_CONTACTS = "api/contacts";
 
     private UrlMaker(SharedPreferences sharedPreferences) {
         server = sharedPreferences.getString("server", "dev.broncocast.org");

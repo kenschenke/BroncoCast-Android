@@ -52,6 +52,8 @@ public class RegistrationStepTwoActivity extends AppCompatActivity implements Te
         textViewPhoneHelp = findViewById(R.id.textViewPhoneHelp);
         buttonRegister = findViewById(R.id.buttonRegister);
 
+        editTextPhone.addTextChangedListener(new PhoneMask());
+
         nameHelper = new TextFieldHelper(editTextName, textViewName, textViewNameHelp);
         nameHelper.callable = this;
         phoneHelper = new TextFieldHelper(editTextPhone, textViewPhone, textViewPhoneHelp);
