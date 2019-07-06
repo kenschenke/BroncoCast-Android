@@ -22,6 +22,8 @@ import static com.android.volley.Request.Method.POST;
 public class NetworkUtil {
 
     public static void signInUser(final Activity activity, final String username, final String password) {
+        final BroncoCastApplication app = (BroncoCastApplication) activity.getApplication();
+
         UrlMaker urlMaker = UrlMaker.getInstance(activity);
         StringRequest stringRequest = new StringRequest(POST, urlMaker.getUrl(UrlMaker.URL_SIGNIN), new Response.Listener<String>() {
             @Override
@@ -68,6 +70,11 @@ public class NetworkUtil {
                 params.put("_remember_me", "on");
                 params.put("applogin","true");
 
+                if (!app.FcmToken.isEmpty()) {
+                    params.put("DeviceToken", app.FcmToken);
+                    params.put("DeviceType", "FCM_ANDROID");
+                }
+
                 return params;
             }
 
@@ -80,7 +87,6 @@ public class NetworkUtil {
             }
         };
 
-        BroncoCastApplication app = (BroncoCastApplication) activity.getApplication();
         app.getRequestQueue().add(stringRequest);
     }
 

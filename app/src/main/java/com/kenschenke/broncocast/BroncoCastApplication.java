@@ -8,6 +8,7 @@ import com.android.volley.toolbox.Volley;
 public class BroncoCastApplication extends Application {
 
     private RequestQueue requestQueue = null;
+    public String FcmToken = "";
 
     BroncoCastApplication() {
         super();
