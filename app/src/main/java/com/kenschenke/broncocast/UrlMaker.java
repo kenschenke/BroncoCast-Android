@@ -19,7 +19,7 @@ public class UrlMaker {
     public static String URL_CONTACTS = "api/contacts";
 
     private UrlMaker(SharedPreferences sharedPreferences) {
-        server = sharedPreferences.getString("server", "dev.broncocast.org");
+        server = sharedPreferences.getString("server", "www.broncocast.org");
     }
 
     public static UrlMaker getInstance(ContextWrapper contextWrapper) {
