@@ -10,7 +10,7 @@ public class BroncoCastApplication extends Application {
     private RequestQueue requestQueue = null;
     public String FcmToken = "";
 
-    BroncoCastApplication() {
+    public BroncoCastApplication() {
         super();
     }
 
