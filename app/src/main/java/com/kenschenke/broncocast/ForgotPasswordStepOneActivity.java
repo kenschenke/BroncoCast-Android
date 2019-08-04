@@ -50,6 +50,7 @@ public class ForgotPasswordStepOneActivity extends AppCompatActivity implements 
         textViewPhone = findViewById(R.id.textViewPhone);
         textViewPhoneHelp = findViewById(R.id.textViewPhoneHelp);
         editTextPhone = findViewById(R.id.editTextPhone);
+        editTextPhone.addTextChangedListener(new PhoneMask());
         phoneHelper = new TextFieldHelper(editTextPhone, textViewPhone, textViewPhoneHelp);
         phoneHelper.callable = this;
 

@@ -109,7 +109,7 @@ public class ForgotPasswordStepTwoActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("Contact", email.isEmpty() ? email : phone);
+                params.put("Contact", email.isEmpty() ? phone : email);
                 params.put("Code", resetCode);
                 params.put("Password", newPassword);
 
