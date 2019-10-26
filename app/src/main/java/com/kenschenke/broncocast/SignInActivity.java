@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -51,7 +52,17 @@ public class SignInActivity extends AppCompatActivity {
 
     public void signInClicked(View view) {
         InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        View currentFocus = getCurrentFocus();
+        if (currentFocus != null) {
+            manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+        String userName = editTextUsername.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        if (userName.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter your sign in information", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         NetworkUtil.signInUser(this, editTextUsername.getText().toString(), editTextPassword.getText().toString());
     }
