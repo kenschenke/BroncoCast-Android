@@ -1,5 +1,6 @@
 package com.kenschenke.broncocast;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -116,13 +117,14 @@ public class BroadcastsFragment extends Fragment {
     }
 
     private void fetchBroadcasts() {
-        UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
+        final Activity thisActivity = getActivity();
+        UrlMaker urlMaker = UrlMaker.getInstance(thisActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, urlMaker.getUrl(UrlMaker.URL_BROADCASTS), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (!response.getBoolean("Success")) {
-                        Toast.makeText(getActivity(), response.getString("Error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(thisActivity, response.getString("Error"), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -145,7 +147,7 @@ public class BroadcastsFragment extends Fragment {
 
                     Collections.sort(broadcastData, new broadcastComp());
 
-                    SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), broadcastData,
+                    SimpleAdapter simpleAdapter = new SimpleAdapter(thisActivity, broadcastData,
                             android.R.layout.simple_list_item_2,
                             new String[] {"delivered", "shortMsg"},
                             new int[] {android.R.id.text1, android.R.id.text2});
@@ -172,19 +174,19 @@ public class BroadcastsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("error", error.toString());
-                Toast.makeText(getActivity(), "Unable to contact server", Toast.LENGTH_LONG).show();
+                Toast.makeText(thisActivity, "Unable to contact server", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                SharedPreferences prefs = getActivity().getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
+                SharedPreferences prefs = thisActivity.getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
                 headers.put("cookie", prefs.getString("AuthCookie", ""));
                 return headers;
             }
         };
 
-        BroncoCastApplication app = (BroncoCastApplication) getActivity().getApplication();
+        BroncoCastApplication app = (BroncoCastApplication) thisActivity.getApplication();
         app.getRequestQueue().add(jsonObjectRequest);
     }
 

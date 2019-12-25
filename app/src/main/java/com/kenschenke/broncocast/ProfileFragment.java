@@ -183,13 +183,14 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
     }
 
     private void fetchContacts() {
-        UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
+        final Activity thisActivity = getActivity();
+        UrlMaker urlMaker = UrlMaker.getInstance(thisActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, urlMaker.getUrl(UrlMaker.URL_CONTACTS), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (!response.getBoolean("Success")) {
-                        Toast.makeText(getActivity(), response.getString("Error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(thisActivity, response.getString("Error"), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -215,7 +216,7 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
 
                     Collections.sort(contactData, new contactComp());
 
-                    SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), contactData,
+                    SimpleAdapter simpleAdapter = new SimpleAdapter(thisActivity, contactData,
                             android.R.layout.simple_list_item_1,
                             new String[] {"contact"},
                             new int[] {android.R.id.text1});
@@ -249,30 +250,31 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("error", error.toString());
-                Toast.makeText(getActivity(), "Unable to contact server", Toast.LENGTH_LONG).show();
+                Toast.makeText(thisActivity, "Unable to contact server", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                SharedPreferences prefs = getActivity().getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
+                SharedPreferences prefs = thisActivity.getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
                 headers.put("cookie", prefs.getString("AuthCookie", ""));
                 return headers;
             }
         };
 
-        BroncoCastApplication app = (BroncoCastApplication) getActivity().getApplication();
+        BroncoCastApplication app = (BroncoCastApplication) thisActivity.getApplication();
         app.getRequestQueue().add(jsonObjectRequest);
     }
 
     private void fetchProfile() {
-        UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
+        final Activity thisActivity = getActivity();
+        UrlMaker urlMaker = UrlMaker.getInstance(thisActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, urlMaker.getUrl(UrlMaker.URL_PROFILE), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (!response.getBoolean("Success")) {
-                        Toast.makeText(getActivity(), response.getString("Error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(thisActivity, response.getString("Error"), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -287,26 +289,27 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("error", error.toString());
-                Toast.makeText(getActivity(), "Unable to contact server", Toast.LENGTH_LONG).show();
+                Toast.makeText(thisActivity, "Unable to contact server", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                SharedPreferences prefs = getActivity().getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
+                SharedPreferences prefs = thisActivity.getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
                 headers.put("cookie", prefs.getString("AuthCookie", ""));
                 return headers;
             }
         };
 
-        BroncoCastApplication app = (BroncoCastApplication) getActivity().getApplication();
+        BroncoCastApplication app = (BroncoCastApplication) thisActivity.getApplication();
         app.getRequestQueue().add(jsonObjectRequest);
     }
 
     private void saveProfile() {
         final String nameParam = editTextName.getText().toString().trim();
 
-        UrlMaker urlMaker = UrlMaker.getInstance(getActivity());
+        final Activity thisActivity = getActivity();
+        UrlMaker urlMaker = UrlMaker.getInstance(thisActivity);
         StringRequest stringRequest = new StringRequest(POST, urlMaker.getUrl(UrlMaker.URL_PROFILE), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -314,7 +317,7 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (!jsonObject.getBoolean("Success")) {
-                        Toast.makeText(getActivity(), jsonObject.getString("Error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(thisActivity, jsonObject.getString("Error"), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -347,13 +350,13 @@ public class ProfileFragment extends Fragment implements TextFieldHelperCallable
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                SharedPreferences prefs = getActivity().getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
+                SharedPreferences prefs = thisActivity.getSharedPreferences("com.kenschenke.broncocast", Context.MODE_PRIVATE);
                 headers.put("cookie", prefs.getString("AuthCookie", ""));
                 return headers;
             }
         };
 
-        BroncoCastApplication app = (BroncoCastApplication) getActivity().getApplication();
+        BroncoCastApplication app = (BroncoCastApplication) thisActivity.getApplication();
         textViewNameHelp.setText("Saving name");
         app.getRequestQueue().add(stringRequest);
     }
